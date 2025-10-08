@@ -1,6 +1,7 @@
 # Recomendacion-de-productos-skincare
 
 - Objetivo del trabajo:
+  
 Desarrollar un sistema de recomendación inteligente de productos de skincare que, mediante técnicas de minería de datos y aprendizaje automático, identifique patrones de comportamiento y preferencias de los usuarios para ofrecer sugerencias personalizadas según su tipo de piel, características individuales y valores éticos. El sistema busca reducir la sobrecarga de información en plataformas con amplios catálogos, mejorar la experiencia de compra y apoyar la toma de decisiones tanto de los consumidores como de las marcas, a partir del análisis estructurado y textual de datos históricos de productos y reseñas.
 -  Nombre de los alumnos participantes:
   
