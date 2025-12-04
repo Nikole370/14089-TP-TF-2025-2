@@ -1,0 +1,19 @@
+{
+    "total_products": 8494,
+    "successful_products": 1669,
+    "success_rate": 0.1964916411584648,
+    "top_features": [
+        "reviews",
+        "rating",
+        "child_count",
+        "price_usd",
+        "online_only"
+    ],
+    "feature_importance_scores": [
+        0.4875979868225389,
+        0.2369407836262115,
+        0.13336741120242215,
+        0.07568865543502122,
+        0.0323276795600052
+    ]
+}
