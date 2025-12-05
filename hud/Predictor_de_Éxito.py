@@ -170,7 +170,9 @@ def load_models():
         'xgb_baseline': joblib.load('models3/xgboost_model.pkl'),
         'lgb_baseline': joblib.load('models3/lightgbm_model.pkl'),
         'rf_baseline': joblib.load('models3/random_forest_model.pkl'),
-        'imputer': joblib.load('models3/imputer.pkl')
+        'imputer': joblib.load('models3/imputer.pkl'),
+        'tfidf_vec': joblib.load('models2/model2_tfidf.pkl'),
+        'text_model': joblib.load('models2/model2_xgb.pkl'),
     }
     
     # Cargar features
@@ -256,6 +258,23 @@ def predict_product(features_dict):
     }
     
     return predictions
+
+def predict_text_review(text, models):
+    """
+    Recibe texto libre, lo transforma con TF-IDF y predice éxito/no éxito.
+    """
+    vec = models['tfidf_vec']
+    model = models['text_model']
+
+    # Transformar texto
+    X_text = vec.transform([text])
+
+    # Predicción
+    pred = model.predict(X_text)[0]
+    proba = model.predict_proba(X_text)[0][1]
+
+    return pred, proba
+
 
 def generate_random_product():
     """Genera un producto aleatorio del dataset (sesgo hacia exitosos)"""
@@ -365,7 +384,7 @@ st.markdown('<h1 class="main-title">Sephora Product Success Predictor</h1>', uns
 st.markdown('<p class="subtitle">Predicción de éxito comercial de productos de skincare usando Machine Learning</p>', unsafe_allow_html=True)
 
 # Tabs de navegación
-tab1, tab2, tab3 = st.tabs(["Predicción", "Comparación de Modelos", "Documentación"])
+tab1, tab2, tab3, tab4 = st.tabs(["Predicción", "Predicción de Texto", "Comparación de Modelos", "Documentación"])
 
 with tab1:
     # Botón para generar producto aleatorio
@@ -647,6 +666,27 @@ with tab1:
         st.warning("PRECAUCIÓN: Producto con bajo potencial de éxito")
 
 with tab2:
+    st.markdown("## Predictor de Texto (Reseñas o descripciones)")
+
+    st.write("Ingresa una reseña o descripción de un producto y el modelo predecirá si será **exitoso o no**.")
+
+    input_text = st.text_area("Texto del usuario", height=200)
+
+    if st.button("Predecir con texto", type="primary"):
+        if len(input_text.strip()) == 0:
+            st.warning("Por favor ingresa un texto.")
+        else:
+            pred, proba = predict_text_review(input_text, models)
+
+            st.markdown("### Resultado")
+            
+            if pred == 1:
+                st.success(f"Predicción: **EXITOSO** 🚀\n\nProbabilidad: {proba*100:.2f}%")
+            else:
+                st.error(f"Predicción: **NO EXITOSO** ❌\n\nProbabilidad: {(1-proba)*100:.2f}%")
+
+
+with tab3:
     st.markdown("## Comparación de Modelos")
     
     # Tabla de métricas
@@ -771,7 +811,7 @@ with tab2:
             improvement = ((tuned - base) / base) * 100
             st.metric(metric, f"{tuned:.4f}", delta=f"{improvement:+.2f}%")
 
-with tab3:
+with tab4:
     st.markdown("## Documentación Técnica")
     st.markdown("")
     
